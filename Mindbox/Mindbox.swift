@@ -504,7 +504,7 @@ public class Mindbox: NSObject {
                     .category(.general).level(.fault).make()
                 self.initError = error
             }
-            self.persistenceStorage?.storeToFileBackgroundExecution()
+            self.persistenceStorage?.storeToFileBackgroundExecution(queue: queue)
         }
     }
 

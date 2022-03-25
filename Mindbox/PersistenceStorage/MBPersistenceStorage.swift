@@ -119,7 +119,7 @@ class MBPersistenceStorage: PersistenceStorage {
         onDidChange?()
     }
     
-    func storeToFileBackgroundExecution() {
+    func storeToFileBackgroundExecution(queue: DispatchQueue) {
         let path = FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("BackgroundExecution.plist")
@@ -128,7 +128,12 @@ class MBPersistenceStorage: PersistenceStorage {
         let encoder = PropertyListEncoder()
         encoder.outputFormat = .xml
         do {
-            let data = try encoder.encode(backgroundExecutions)
+            var executions: [BackgroudExecution] {
+                queue.sync {
+                    return self.backgroundExecutions
+                }
+            }
+            let data = try encoder.encode(executions)
             try data.write(to: path)
             Log("Successfully storeToFileBackgroundExecution")
                 .category(.general).level(.info).make()

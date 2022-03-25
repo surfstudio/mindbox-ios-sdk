@@ -35,7 +35,7 @@ protocol PersistenceStorage: AnyObject {
 
     func resetBackgroundExecutions()
 
-    func storeToFileBackgroundExecution()
+    func storeToFileBackgroundExecution(queue: DispatchQueue)
 
     var onDidChange: (() -> Void)? { get set }
 }
